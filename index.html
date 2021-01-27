@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Shopping Cart</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+   <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+   <section>
+      <div class="container">
+         <div class="cart">
+            <div class="col-md-12 col-lg-10 mx-auto">
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item">
+                        <img src="images/product-1.png" alt="">
+                        <h5>iPhone 11 128GB Black</h5>
+                     </div>
+
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id="phone-sub" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="add-sub-value" type="text" class="form-control text-center" value="1">
+                           <button id="phone-add" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <h5>$<span id="phonePrice">1219</span></h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <img src="images/product-2.png" alt="">
+                        <h5>iPhone 11 Silicone Case - Black</h5>
+                     </div>
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id="backCover-sub" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="backCover" type="text" class="form-control text-center" value="1">
+                           <button id="backCover-add" class="btn btn-default"><i class="fas fa-plus"></i></button>
+
+                        </div>
+                        <h5>$<span id="coverPrice">59</span></h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+
+                     <div class="col-md-8">
+                        <h5>Subtotal: </h5>
+                        <h5>Tax:</h5>
+                        <h5>Total:</h5>
+                     </div>
+
+                     <div class="col-md-4 status">
+                        <h5>$<span id="showSubtotal">1,278</span></h5>
+                        <h5>$<span id="showTax">13</span></h5>
+                        <h5>$<span id="showTotal">1,291</span></h5>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 pt-4 pb-4">
+                  <button type="button" class="btn btn-success check-out">Check Out</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <script>
+
+      //global variable for price
+      var pricePhone = 1219;
+      var priceCover = 59;
+
+      //event handler for adding
+      const fetchValue = document.getElementById("phone-add");
+      fetchValue.addEventListener("click", function () {
+         const addingPhone = forAdding("add-sub-value");
+         document.getElementById("add-sub-value").value = addingPhone;
+         const phoneValue = PriceCalculation(addingPhone, pricePhone);
+         document.getElementById("phonePrice").innerText = phoneValue;
+         checkOut();
+      })
+
+      //event handler for subtracting
+      const subtract = document.getElementById("phone-sub");
+      subtract.addEventListener("click", function () {
+         const subtractPhone = subtracting("add-sub-value");
+         document.getElementById("add-sub-value").value = subtractPhone;
+         const phoneValue = PriceCalculation(subtractPhone, pricePhone);
+         document.getElementById("phonePrice").innerText = phoneValue;
+         checkOut();
+      })
+
+      //event handler for adding back cover
+      const addBack = document.getElementById("backCover-add");
+      addBack.addEventListener("click", function () {
+         const addingBackCover = forAdding('backCover');
+         document.getElementById("backCover").value = addingBackCover;
+         const coverPrice = PriceCalculation(addingBackCover, priceCover);
+         document.getElementById("coverPrice").innerText = coverPrice;
+         checkOut();
+      })
+
+      //event handler for subtracting back cover
+      const subBack = document.getElementById("backCover-sub");
+      subBack.addEventListener("click", function () {
+         const subtractBackCover = subtracting("backCover");
+         document.getElementById("backCover").value = subtractBackCover;
+         const coverPrice = PriceCalculation(subtractBackCover, priceCover);
+         document.getElementById("coverPrice").innerText = coverPrice;
+         checkOut();
+      })
+
+      //function for converting string to number;
+
+      function convert(id) {
+         const stringFetch = document.getElementById(id).innerText;
+         const getNumber = parseFloat(stringFetch);
+         return getNumber;
+      }
+
+      //function for adding
+      function forAdding(id) {
+         const addValue = document.getElementById(id).value;
+         const value = parseInt(addValue);
+         return value + 1;
+      }
+
+
+      //function for subtracting
+      function subtracting(id) {
+         const subValue = document.getElementById(id).value;
+         const number = parseInt(subValue);
+         if (number > 0) {
+            return number - 1;
+         }
+         else {
+            return 0;
+         }
+      }
+
+
+      //function for  price calculation
+      function PriceCalculation(quantity, price) {
+         return price * quantity;
+      }
+
+      //function checkout
+      function checkOut() {
+         const phone = document.getElementById("add-sub-value").value;
+         const phoneQuantity = parseInt(phone);
+         const cover = document.getElementById("backCover").value;
+         const coverQuantity = parseInt(cover);
+         const subTotal = (phoneQuantity * pricePhone) + (coverQuantity * priceCover);
+         document.getElementById("showSubtotal").innerText = subTotal;
+         const tax = Math.round(subTotal * .01);
+         document.getElementById("showTax").innerText = tax;
+         document.getElementById("showTotal").innerText = subTotal + tax;
+      }
+   </script>
+</body>
+
+</html>
